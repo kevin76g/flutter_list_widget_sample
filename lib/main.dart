@@ -15,15 +15,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter List Widget Sample'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -35,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i <= 50; i++) {
       entries.add(i);
     }
   }
@@ -44,28 +42,27 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text('Custom Scroll View Sample'),
       ),
-      body: ListView(
-        children: <Widget>[
-          const Text(
-            'You have pushed the button this many times:',
+      body: CustomScrollView(slivers: [
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return Container(
+                color: Colors.amber.shade100,
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 60.0),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Sliver child ${entries[index].toString()}',
+                  style: const TextStyle(fontSize: 22.0),
+                ),
+              );
+            },
+            childCount: entries.length,
           ),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: entries.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  decoration: BoxDecoration(
-                      color: Colors.amber.shade100,
-                      border: Border.all(color: Colors.grey, width: 0.5)),
-                  height: 50,
-                  // color: Colors.amber,
-                  child: Center(child: Text('Entry ${entries[index]}')),
-                );
-              }),
-        ],
-      ),
+        ),
+      ]),
     );
   }
 }
